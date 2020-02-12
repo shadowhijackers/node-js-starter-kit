@@ -2,6 +2,7 @@ import express, {Request, Response, Router} from 'express';
 import container, {Service} from "typedi";
 
 import {UsersService} from "../../services";
+import {authMiddleware} from "../middleware";
 
 @Service()
 export class UsersRoutes {
@@ -21,7 +22,7 @@ export class UsersRoutes {
 
     async getUsers(){
        console.log("userRoutes", this.userService);
-      this.router.get('/', async (req: Request, res: Response)=>{
+      this.router.get('/', authMiddleware, async (req: Request, res: Response)=>{
           res.status(200).send(await this.userService.getUsers());
       })
     }
