@@ -1,15 +1,15 @@
 import express, {Request, Response, Router} from 'express';
 import container, {Service} from "typedi";
 
-import {UserService} from "../../services";
+import {UsersService} from "../../services";
 
 @Service()
-export class UserRoutes {
+export class UsersRoutes {
 
     public router: express.Router;
 
     constructor(
-        private userService: UserService
+        private userService: UsersService
     ) {
         this.router = Router();
     }
@@ -27,7 +27,7 @@ export class UserRoutes {
     }
 
     public static getUserRoutes(){
-        return container.get(UserRoutes).setUserRoutes();
+        return container.get(UsersRoutes).setUserRoutes();
     }
 
 }

@@ -1,6 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
 
-export class UserModelSchema {
+export class UsersModelSchema {
 
     schema: Schema<any>;
 
@@ -33,7 +33,7 @@ export class UserModelSchema {
     }
 
     static getInstance() {
-        const ins = new UserModelSchema();
+        const ins = new UsersModelSchema();
         ins.configStaticsExtensionMethods();
         return ins.schema;
     }

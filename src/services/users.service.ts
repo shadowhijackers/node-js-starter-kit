@@ -1,15 +1,15 @@
 import container, {Inject, Service} from "typedi";
 
 @Service()
-export class UserService {
+export class UsersService {
 
     constructor(
-       @Inject('UserModel') private userModel: any
+       @Inject('UsersModel') private usersModel: any
     ) {
     }
 
     public async getUsers(){
-      return await this.userModel.getUsers({});
+      return await this.usersModel.getUsers({});
     }
 
 }

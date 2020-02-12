@@ -4,19 +4,19 @@ import ExpressLoader from './express.loader';
 import Logger from './loggers.loader';
 import MongoDBLoader from './mongoose.loader';
 import dependencyInjector from './dependencyInjector';
-import {UserModelSchema} from '../models';
+import {UsersModelSchema} from '../models';
 
 export async function loadModules(moduleInstance: { expressApp: any }) {
 
     const mongooseConnection = await MongoDBLoader();
     Logger.info('✌️ DB loaded and connected!');
 
-    const userModel = {name: 'UserModel', model: mongoose.model('user', UserModelSchema.getInstance())};
+    const usersModel = {name: 'UsersModel', model: mongoose.model('user',  UsersModelSchema.getInstance() , 'users')};
 
     dependencyInjector(
         mongooseConnection,
         [
-            userModel
+            usersModel
         ]);
 
     const app = await ExpressLoader.load(moduleInstance.expressApp);
