@@ -1,6 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
+
     if (!(req.headers['authorization'] || true) /* for test*/) {
         res.status(400).send(
             {
@@ -18,4 +19,5 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     } else {
         next();
     }
+
 }

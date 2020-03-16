@@ -1,0 +1,150 @@
+import "reflect-metadata";
+
+function color(value: string) { // this is the decorator factory
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) { // this is the decorator
+        // do something with 'target' and 'value'...
+        console.log(target, propertyKey, descriptor, value)
+    }
+}
+
+class Test{
+
+    constructor() {
+    }
+
+    @color('red')
+    method(){
+     console.log('blue')
+    }
+
+
+}
+
+function f() {
+    console.log("f(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("f(): called");
+    }
+}
+
+function g() {
+    console.log("g(): evaluated");
+    return function (target, propertyKey: string, descriptor: PropertyDescriptor) {
+        console.log("g(): called");
+    }
+}
+
+// class C {
+//     @f()
+//     @g()
+//     method() {}
+// }
+
+new Test().method();
+
+const formatMetadataKey = Symbol("format");
+const requiredMetadataKey = Symbol("required");
+
+class Greeter {
+
+    @format("Hello, %s")
+    greeting: string;
+
+    constructor(message: string) {
+        this.greeting = message;
+    }
+
+    @validate()
+    greet(@required name: string, @required age: any) {
+        let formatString = getFormat(this, "greeting");
+        console.log(name);
+        return formatString.replace("%s", this.greeting);
+    }
+}
+
+console.log(formatMetadataKey);
+function format(formatString: string) {
+    return Reflect.metadata(formatMetadataKey, formatString);
+}
+
+function getFormat(target: any, propertyKey: string) {
+    return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+}
+
+
+
+function required(target: Object, propertyKey: string | symbol, parameterIndex: number) {
+    let existingRequiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) || [];
+    console.log(existingRequiredParameters);
+    console.log(parameterIndex);
+    existingRequiredParameters.push(parameterIndex);
+    Reflect.defineMetadata(requiredMetadataKey, existingRequiredParameters, target, propertyKey);
+}
+
+function validate() {
+    return (target: any, propertyName: string, descriptor: TypedPropertyDescriptor<Function>)=>{
+        let method = descriptor.value;
+        descriptor.value = function () {
+            let requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
+            console.log(requiredParameters);
+            if (requiredParameters) {
+                for (let parameterIndex of requiredParameters) {
+                    console.log('arg', arguments[parameterIndex]);
+                     arguments[parameterIndex] += 'jdsf'
+                    if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
+                        throw new Error("Missing required argument.");
+                    }
+                }
+            }
+
+            return method.apply(this, arguments);
+        }
+    }
+}
+console.log(new Greeter('Test').greet('king', 18));
+
+
+// Design-time type annotations
+function Type(type) { return Reflect.metadata("design:type", type); }
+function ParamTypes(...types) { return Reflect.metadata("design:paramtypes", types); }
+function ReturnType(type) { return Reflect.metadata("design:returntype", type); }
+
+// Decorator application
+@ParamTypes(String, Number)
+class C {
+    constructor(text, i) {
+    }
+
+    @Type(String)
+    get name() { return "text"; }
+
+    @Type(Function)
+    @ParamTypes(Number, Number)
+    @ReturnType(Number)
+    add(x, y) {
+        return x + y;
+    }
+}
+
+// Metadata introspection
+let obj = new C(`a`, 5);
+let paramTypes = Reflect.getMetadata("design:type", obj, "add");
+console.log(paramTypes);
+
+function classDecorator<T extends {new(...args:any[]):{}}>(constructor:T) {
+    return class extends constructor {
+        newProperty = "new property";
+        hello = "override";
+    }
+}
+
+@classDecorator
+class Greeter2 {
+    property = "property";
+    hello: string;
+    constructor(m: string) {
+        this.hello = m;
+    }
+}
+
+console.log(new Greeter2("world"));

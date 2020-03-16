@@ -27,13 +27,14 @@ const TerserPlugin = require('terser-webpack-plugin');
 const workboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-	mode: 'development',
+	mode: 'production',
 	entry: './src/server.ts',
 	target: "node",
 	output: {
 		path: path.join(__dirname, 'dist/'), // express static folder is at /app/lib
 		filename: '[name].js', // the file name of the bundle to create. [name] is,
 	},
+	devtool: 'source-map',
 	plugins: [
 		new webpack.ProgressPlugin(),
 		new workboxPlugin.GenerateSW({
@@ -70,7 +71,12 @@ module.exports = {
 	},
 
 	optimization: {
-		minimizer: [new TerserPlugin()],
+		minimize: false,
+		minimizer: [
+			new TerserPlugin({
+				test: /\.js(\?.*)?$/i
+			}),
+		],
 
 		splitChunks: {
 			cacheGroups: {

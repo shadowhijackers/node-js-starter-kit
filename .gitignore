@@ -107,3 +107,4 @@ dist
 
 .idea/
 git4idea/
+!/src/common/decarators.ts.practice

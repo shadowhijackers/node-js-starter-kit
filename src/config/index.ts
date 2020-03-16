@@ -58,7 +58,7 @@ export default {
      * API configs
      */
     api: {
-        prefix: '/api',
+        prefix: '/api/v1',
     },
     /**
      * Mailgun email credentials

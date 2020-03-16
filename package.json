@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node ./src/server.ts env=development",
     "build": "webpack && cp -r environments dist",
-    "dev": "npm run build && node ./dist/main.js env=development",
+    "dev": "NODE_ENV=development npm run build && node ./dist/main.js env=development",
     "prod": "npm run build && node ./dist/main.js env=production"
   },
   "author": "Team Shadow Hijackers",
@@ -24,17 +24,19 @@
     "reflect-metadata": "^0.1.13",
     "request": "^2.79.0",
     "socket.io": "^2.3.0",
+    "ts-node": "^8.6.2",
     "typedi": "^0.8.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/node": "^13.7.0",
     "@types/app-root-path": "^1.2.4",
     "@types/express": "^4.17.2",
     "@types/mongoose": "^5.7.0",
     "@types/morgan": "^1.7.37",
+    "@types/node": "^13.7.0",
     "@types/socket.io": "^2.1.4",
     "@webpack-cli/init": "^0.3.0",
+    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "file-loader": "^5.0.2",
     "module": "^1.2.5",
@@ -43,6 +45,7 @@
     "terser-webpack-plugin": "^2.3.4",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.6",
     "webpack-cli": "^4.0.0-beta.2",
     "workbox-webpack-plugin": "^5.0.0"
