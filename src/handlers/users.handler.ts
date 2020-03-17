@@ -1,6 +1,8 @@
 import {Service} from "typedi";
-import {UsersService} from "../services";
 import {Request, Response} from "express";
+
+import {UsersService} from "../services";
+import * as common from "../common";
 
 @Service()
 export class UsersHandler {
@@ -12,8 +14,16 @@ export class UsersHandler {
 
     getUsersAPIHandler() {
         return async (req: Request, res: Response) => {
+        
             const users = await this.usersService.getUsers();
-            res.status(200).send(users);
+            const response = common.formatSuccessMessage({
+                msg: 'Success',
+                data: users,
+                sessionToken: 'Auth Token'
+            });
+            
+            res.status(200).send(response);
+    
         }
     }
 

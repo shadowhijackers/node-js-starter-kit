@@ -11,7 +11,7 @@ import outputData from "../config/response";
  * @param sessionValidity
  * @param sessionToken
  */
-function formatErrorMessage({msg, code = 400, sessionToken = null}: { msg: any, code?: number, sessionToken?: any }) {
+export function formatErrorMessage({msg, code = 400, sessionToken = null}: { msg: any, code?: number, sessionToken?: any }) {
     outputData.session.token = sessionToken;
     outputData.session.validity = !sessionToken ? 0 : 1;
     outputData.session.specialMessage = null;
@@ -35,8 +35,8 @@ function formatErrorMessage({msg, code = 400, sessionToken = null}: { msg: any, 
  * @param sessionMessage
  * @param statusCode
  */
-function formatSuccessMessage(
-    {msg, data = {}, sessionToken = null, sessionValidity = 0, sessionMessage = null, statusCode = 200}:
+export function formatSuccessMessage(
+    {msg, data = {}, sessionToken = null, sessionValidity = 1, sessionMessage = 'Session is valid', statusCode = 200}:
         { msg: any, data?: {}, sessionToken?: any, sessionValidity?: number, sessionMessage?: any, statusCode?: number }
 ) {
     outputData.session.token = sessionToken;
