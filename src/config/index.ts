@@ -7,10 +7,10 @@ import appRoot from 'app-root-path';
 const commandArguments = process.argv.slice(2);
 commandArguments.forEach((arg)=>{
 
-    const splittedaArgString = arg.split('=');
+    const slittedAraString = arg.split('=');
 
-    if(splittedaArgString[0] === 'env') {
-        const envFound = dotenv.config({path: `${appRoot.path}/environments/${splittedaArgString[1]}.env`});
+    if(slittedAraString[0] === 'env') {
+        const envFound = dotenv.config({path: `${appRoot.path}/environments/${slittedAraString[1]}.env`});
         if (!envFound) {
             console.log(appRoot);
             throw new Error("⚠️  Couldn't find .env file  ⚠️");

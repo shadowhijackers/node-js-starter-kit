@@ -1,6 +1,6 @@
 import express, {RequestHandler, Router} from 'express';
 import {IRouterParams} from "../types/IRouterParams";
-import {RouterMethodsEnum} from "./enums/router-methods.enum";
+import {RouterMethodsEnum} from "../common/enums/router-methods.enum";
 import {Service} from "typedi";
 
 @Service()

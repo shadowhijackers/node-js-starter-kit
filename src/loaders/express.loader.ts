@@ -37,8 +37,8 @@ export class ExpressLoader {
         this.app.use(logger);
 
         // we use it for only post calls instead of middleware for low latency
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({extended: true}));
+        // this.app.use(bodyParser.json());
+        // this.app.use(bodyParser.urlencoded({extended: true}));
 
         this.app.use(express.urlencoded({extended: false}));
 

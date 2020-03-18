@@ -1,9 +1,9 @@
-import express, {Request, Response, Router} from 'express';
 import container, {Service} from "typedi";
+import bodyParser from 'body-parser';
 
 import {UsersService} from "../../services";
 import {authMiddleware} from "../middleware";
-import {CustomRouter} from "../../common/router.common";
+import {CustomRouter} from "../../core";
 import {RouterMethodsEnum} from "../../common/enums/router-methods.enum";
 import responseModel from "../../config/response";
 import {UsersHandler} from "../../handlers";
@@ -21,6 +21,10 @@ export class UsersRoutes {
 
     setUserRoutes() {
         this.getUsers();
+        this.signUp();
+        this.signIn();
+        this.forgetPassword();
+        this.resetPassword();
         return this.customRouter.exportRouterInstance();
     }
 
@@ -47,26 +51,32 @@ export class UsersRoutes {
 
     }
 
-    signIn() {
-
-        this.customRouter.setRoute({
-            path: '/login',
-            method: RouterMethodsEnum.post,
-            handler: this.usersHandler.signInAPIHandler(),
-            middleware: [],
-            description: 'Sign in api'
-        });
-
-    }
-
     signUp() {
 
         this.customRouter.setRoute({
             path: '/register',
             method: RouterMethodsEnum.post,
             handler: this.usersHandler.signUpAPIHandler(),
-            middleware: [],
+            middleware: [
+                bodyParser.json(),
+                bodyParser.urlencoded({extended: true}),
+            ],
             description: 'Sign up api'
+        });
+
+    }
+
+    signIn() {
+
+        this.customRouter.setRoute({
+            path: '/login',
+            method: RouterMethodsEnum.post,
+            handler: this.usersHandler.signInAPIHandler(),
+            middleware: [
+                 bodyParser.json(),
+                 bodyParser.urlencoded({extended: true}),
+                ],
+            description: 'Sign in api'
         });
 
     }
@@ -77,7 +87,10 @@ export class UsersRoutes {
             path: '/forget-password',
             method: RouterMethodsEnum.post,
             handler: this.usersHandler.forgetPasswordAPIHandler(),
-            middleware: [],
+            middleware: [
+                bodyParser.json(),
+                bodyParser.urlencoded({extended: true}),
+            ],
             description: 'forget password api'
         });
 
@@ -89,7 +102,10 @@ export class UsersRoutes {
             path: '/reset-password',
             method: RouterMethodsEnum.put,
             handler: this.usersHandler.resetPasswordAPIHandler(),
-            middleware: [],
+            middleware: [
+                bodyParser.json(),
+                bodyParser.urlencoded({extended: true}),
+            ],
             description: 'reset password api'
         });
 
