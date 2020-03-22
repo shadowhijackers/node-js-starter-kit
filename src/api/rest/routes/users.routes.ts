@@ -1,12 +1,12 @@
 import container, {Service} from "typedi";
 import bodyParser from 'body-parser';
 
-import {UsersService} from "../../services";
+import {UsersService} from "../../../services";
 import {authMiddleware} from "../middleware";
-import {CustomRouter} from "../../core";
-import {RouterMethodsEnum} from "../../common/enums/router-methods.enum";
-import responseModel from "../../config/response";
-import {UsersHandler} from "../../handlers";
+import {CustomRouter} from "../../../core";
+import {RouterMethodsEnum} from "../../../common/enums";
+import responseModel from "../../../config/response";
+import {UsersHandler} from "../handlers";
 
 @Service()
 export class UsersRoutes {

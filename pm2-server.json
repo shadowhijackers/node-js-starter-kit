@@ -1,13 +1,23 @@
 {
-  "apps": [{
-    "name": "nodejs-starter-kit",
-    "instances": "max",
-    "exec_mode": "cluster",
-    "script": "./dist/main.js",
-    "node_args": "--max_old_space_size=8192",
-    "args": ["env=production"],
-    "env": {
-      "NODE_ENV": "production"
+  "apps": [
+    {
+      "name": "nodejs-starter-kit",
+      "instances": "max",
+      "exec_mode": "cluster",
+      "script": "./dist/main.js",
+      "node_args": "--max_old_space_size=8192",
+      "args": [
+        "env=production"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "JWT_SECRET": "",
+        "MONGODB_URI": "mongodb://127.0.0.1:27017/all",
+        "DB_USER": "allDev",
+        "DB_PASSWORD": "allDev@api",
+        "PORT": 4000,
+        "LOG_LEVEL": "debug"
+      }
     }
-  }]
+  ]
 }

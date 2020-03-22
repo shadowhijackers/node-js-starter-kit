@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { Db } from 'mongodb';
 import config from '../config';
 
 export default async (): Promise<any> => {
     try {
+        console.log(config);
         const mongooseInstance = await mongoose.connect(config.db.url as string, {
             keepAlive: true,
             keepAliveInitialDelay: 300000,

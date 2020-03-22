@@ -1,8 +1,8 @@
 import {Service} from "typedi";
 import {Request, Response} from "express";
 
-import {UsersService} from "../services";
-import * as common from "../common";
+import {UsersService} from "../../../services";
+import * as common from "../../../common";
 
 @Service()
 export class UsersHandler {
@@ -34,20 +34,20 @@ export class UsersHandler {
             try {
                 if (payload) {
 
-                    const result = await this.usersService.registerUser(payload);
+                    const result: any = await this.usersService.registerUser(payload);
                     const response = common.formatSuccessMessage({
                         msg: 'Success',
                         data: {},
                         sessionToken: 'Auth Token'
                     });
 
-                    if (result.isSuccess) {
+                    if (result?.isSuccess) {
                         res.status(200).send(response);
                         return
                     }
 
                     response.status.code = 400;
-                    response.status.message = result.message;
+                    response.status.message = result?.message;
 
                     res.send(200).send(response);
 

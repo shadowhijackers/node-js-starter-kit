@@ -2,7 +2,6 @@ import {Inject, Service} from "typedi";
 import {EventDispatcher} from "event-dispatch";
 
 import "../subscribers/users.events-subscriber";
-
 import {IUser} from "../types";
 import {EventDispatcherNamesEnum} from "../common/enums/event-dispatcher-names.enum";
 

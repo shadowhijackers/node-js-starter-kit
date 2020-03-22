@@ -14,11 +14,10 @@ import outputData from "../config/response";
 export function formatErrorMessage({msg, code = 400, sessionToken = null}: { msg: any, code?: number, sessionToken?: any }) {
     outputData.session.token = sessionToken;
     outputData.session.validity = !sessionToken ? 0 : 1;
-    outputData.session.specialMessage = null;
+    outputData.session.message = null;
 
     outputData.data = {};
     outputData.status.code = code;
-    outputData.status.status = 'Error';
     outputData.status.message = msg;
     return outputData;
 }
@@ -41,11 +40,10 @@ export function formatSuccessMessage(
 ) {
     outputData.session.token = sessionToken;
     outputData.session.validity = sessionValidity;
-    outputData.session.specialMessage = sessionMessage;
+    outputData.session.message = sessionMessage;
 
     outputData.data = data;
     outputData.status.code = statusCode;
-    outputData.status.status = 'Success';
     outputData.status.message = msg;
 
     return outputData;

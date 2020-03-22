@@ -1,39 +1,43 @@
 import express from 'express';
 import http2, {Server} from 'http';
-import "reflect-metadata";
-
-import loaders from './loaders'
-import config from './config';
 import {Container} from "typedi";
 import {Logger} from "winston";
 
+import loaders from './loaders'
+import config from './config';
+
+
 export class AppServer {
 
-    public static PORT =  config.port || '3000';
-
+    public  PORT =  config.port || '3000';
+    logger: Logger = Container.get('LoggerInstance');
 
     constructor() {
     }
 
     public static async  start(){
 
+        const appServer = new AppServer();
         const app = express();
         const loadedModules = await loaders({ expressApp: app});
-        const server = http2.createServer(loadedModules.app)
-            .listen(this.PORT);
-        server.on( 'listening',  this.onListening(server));
-        server.on('error', this.onError(server))
+        const server = http2.createServer(loadedModules?.app)
+            .listen(appServer.PORT);
+
+        server.on( 'listening',  appServer.onListening(server));
+        server.on('error', appServer.onError(server));
+        appServer.prepareAppToExitWhileCrashes(server);
+        appServer.exceptionHandling();
 
     }
 
-    public static onListening(server: Server){
+    private  onListening(server: Server){
         return ()=>{
             const addr = server.address();
             console.log('listening');
         }
     }
 
-    public static onError(server: Server){
+    private  onError(server: Server){
         return (error: Error | any)=>{
 
             const logger: Logger = Container.get('LoggerInstance');
@@ -62,6 +66,21 @@ export class AppServer {
             }
 
         }
+    }
+
+    prepareAppToExitWhileCrashes(server: Server) {
+        process.on('SIGINT', function () {
+            server.close(function () {
+                process.exit(0);
+            });
+        });
+    }
+
+     exceptionHandling(){
+        process.on('uncaughtException',  (err) => {
+            this.logger.error(err);
+            process.exit(1); // process will start the server again by pm2 in production
+        });
     }
 
 }

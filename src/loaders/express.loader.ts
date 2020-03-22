@@ -5,7 +5,7 @@ import {Container, Inject} from "typedi";
 import {Logger} from "winston";
 import helmet from 'helmet';
 
-import api from '../api/index';
+import APIs from '../api';
 import LoggerInstance from "./loggers.loader";
 
 export class ExpressLoader {
@@ -42,7 +42,7 @@ export class ExpressLoader {
 
         this.app.use(express.urlencoded({extended: false}));
 
-        api(this.app);
+        APIs.loadRestEndPoints(this.app);
     }
 
     /**

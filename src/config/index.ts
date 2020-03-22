@@ -2,23 +2,18 @@ import dotenv from 'dotenv';
 import appRoot from 'app-root-path';
 
 // Set the NODE_ENV to 'development' by default
-// process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-const commandArguments = process.argv.slice(2);
-commandArguments.forEach((arg)=>{
+if(process.env.NODE_ENV === 'development'){
 
-    const slittedAraString = arg.split('=');
-
-    if(slittedAraString[0] === 'env') {
-        const envFound = dotenv.config({path: `${appRoot.path}/environments/${slittedAraString[1]}.env`});
-        if (!envFound) {
-            console.log(appRoot);
-            throw new Error("⚠️  Couldn't find .env file  ⚠️");
-        }
-        console.log(envFound)
+    const envFound = dotenv.config({path: `${appRoot.path}/environments/${process.env.NODE_ENV}.env`});
+    if (!envFound) {
+        console.log(appRoot);
+        throw new Error("⚠️  Couldn't find .env file  ⚠️");
     }
+    console.log(envFound)
 
-});
+}
 
 export default {
     /**

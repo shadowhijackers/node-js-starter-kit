@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import "reflect-metadata";
 
 import ExpressLoader from './express.loader';
 import Logger from './loggers.loader';
