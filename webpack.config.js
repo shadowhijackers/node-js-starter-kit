@@ -27,7 +27,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const workboxPlugin = require('workbox-webpack-plugin');
 
 module.exports = {
-	mode: 'production',
+	mode: 'development',
 	entry: './src/server.ts',
 	target: "node",
 	output: {

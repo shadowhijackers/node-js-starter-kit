@@ -10,7 +10,7 @@ import config from './config';
 export class AppServer {
 
     public  PORT =  config.port || '3000';
-    logger: Logger = Container.get('LoggerInstance');
+    logger: Logger | null = null;
 
     constructor() {
     }
@@ -20,6 +20,7 @@ export class AppServer {
         const appServer = new AppServer();
         const app = express();
         const loadedModules = await loaders({ expressApp: app});
+        appServer.logger = Container.get('LoggerInstance');
         const server = http2.createServer(loadedModules?.app)
             .listen(appServer.PORT);
 
@@ -78,7 +79,7 @@ export class AppServer {
 
      exceptionHandling(){
         process.on('uncaughtException',  (err) => {
-            this.logger.error(err);
+            this.logger?.error(err);
             process.exit(1); // process will start the server again by pm2 in production
         });
     }

@@ -2,9 +2,10 @@ import dotenv from 'dotenv';
 import appRoot from 'app-root-path';
 
 // Set the NODE_ENV to 'development' by default
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
-if(process.env.NODE_ENV === 'development'){
+// process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+debugger
+console.log(appRoot.path);
+if(process.env.NODE_ENV == 'development'){
 
     const envFound = dotenv.config({path: `${appRoot.path}/environments/${process.env.NODE_ENV}.env`});
     if (!envFound) {

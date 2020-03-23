@@ -4,10 +4,10 @@
   "description": "My node js starter kit project",
   "private": true,
   "scripts": {
-    "start": "ts-node ./src/server.ts env=development",
+    "start": "NODE_ENV=development ts-node ./src/server.ts",
     "build": "webpack && cp -r environments dist",
     "dev": "NODE_ENV=development npm run build && node ./dist/main.js",
-    "prod": "npm run build && pm2 start pm2-server.json",
+    "prod": "webpack && pm2 start pm2-server.json",
     "test": "NODE_ENV=development jest --testTimeout=10000 ",
     "test:coverage": "jest --coverage",
     "snyk:test": "snyk test"
