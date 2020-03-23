@@ -1,3 +1,5 @@
+# Node JS Starter kit in SOLID Architecture.
+  
 # Introduction
   
    This is the starter kit project for node js  with `typescript` 
@@ -42,7 +44,7 @@
    javascript asynchronus coding styles and event emiters. So Here we are using
    async and Event dispatchers. 
    
-     Use case:
+    Case Study:
          We are writing api for user registration. In this endpoint logic 
        we are writting the code for user registration if the user data 
        valid the we will send confimation email and return responses. 
@@ -59,13 +61,38 @@
    Write Test driven development Its an common approach from most of the
    developers. Writing an unit testing for project it will make you more confident
    to deployment and do not allow your code run in production if it not tested.   
-   Here we are using jest and supertest for endpoints.
+   Here we are using jest and supertest for endpoints. Use seperate db for unit 
+   testing environment.
   
    We are added the pm2 server cofiguration here to run this application in 
    cluster mode to speed up the api calls. We are setting the environmetn varibales
    for only in development and testing not added for production. Which added in pm2 server
    So it give an extra layer security for an app. include the pm2-server
    file in your cloud instance itself. here we added for example.    
+ 
+   Use HTTPS/SSL for security, We added helmet and cors setup for improving the 
+   security purpose. Adding the secure level module in the middleware only never
+   going to be make your application more secure its about how you are writing also
+   to be consider. use csurf for prevent the CSRF attack. 
+   
+       Case Study:
+          I have seen one web application there they written one api call for the 
+        loginned User details by passing id in http query. Even that  id is in number format
+        as 1001 when we changed the 1001 to 1002 it gave the details of another uses
+        details. They can get the another user deta. Its became a CSRF loophole. They can get
+        the data by any otherways like JWT token or Auth token. So Writing the code is need
+        to be secured manner. Poor way of coding become a loophole.
+        
+   Don't make user ids in readable formats. its will helpful to enumrate  the other user. Study more
+   about security improvement in [OWSAP](https://www.owasp.org/index.php/Web_Application_Security_Testing_Cheat_Sheet.)   
+   
+   Use Rate Limitter for avoid DDoS , brute force attack and dictionary attack on form datas like signin, OTP cracking. 
+   We are already using the Helmet it will prevent some browser level attack.
+    
+   To imporve the low latency of IO calls we are using the Event emitters, async calls for 
+   parallel and series asynchronus process.  
+     
+     
     
 This project is refered from the following blog and some documents. 
 [Reference](https://dev.to/santypk4/bulletproof-node-js-project-architecture-4epf) 
