@@ -78,10 +78,23 @@ export class AppServer {
     }
 
      exceptionHandling(){
+
         process.on('uncaughtException',  (err) => {
             this.logger?.error(err);
             process.exit(1); // process will start the server again by pm2 in production
         });
+
+        const unhandledRejections = new Map();
+         process.on('unhandledRejection', (reason, promise) => {
+             unhandledRejections.set(promise, reason);
+             console.log(reason);
+         });
+
+         process.on('rejectionHandled', async (promise) => {
+             unhandledRejections.delete(promise);
+             console.log(await promise);
+         });
+
     }
 
 }

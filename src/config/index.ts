@@ -35,6 +35,8 @@ export default {
      */
     jwtSecret: process.env.JWT_SECRET,
 
+    sessionSecret: 'MsSinErt',
+
     /**
      * Used by winston logger
      */

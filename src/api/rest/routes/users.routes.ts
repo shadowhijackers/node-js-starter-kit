@@ -104,11 +104,24 @@ export class UsersRoutes {
             handler: this.usersHandler.resetPasswordAPIHandler(),
             middleware: [
                 bodyParser.json(),
-                bodyParser.urlencoded({extended: true}),
+                authMiddleware
             ],
-            description: 'reset password api'
+            description: 'logout the session'
         });
 
+    }
+
+    logout(){
+      this.customRouter.setRoute({
+          path: '/logout',
+          method: RouterMethodsEnum.get,
+          handler: this.usersHandler.logoutAPIHandler(),
+          middleware: [
+              bodyParser.urlencoded({extended: true}),
+              authMiddleware
+          ],
+          description: 'reset password api'
+      })
     }
 
     public static getUserRoutes() {

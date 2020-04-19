@@ -4,9 +4,12 @@ import morgan from "morgan";
 import {Container, Inject} from "typedi";
 import {Logger} from "winston";
 import helmet from 'helmet';
+import session from 'express-session';
 
 import APIs from '../api';
 import LoggerInstance from "./loggers.loader";
+import config from '../config';
+
 
 export class ExpressLoader {
 
@@ -25,6 +28,7 @@ export class ExpressLoader {
     public config() {
 
         this.setSecurityConfig();
+        this.setExpressSession();
 
         // Logging all the inbound request
         const wintsonLogger: Logger = Container.get('LoggerInstance');
@@ -43,6 +47,15 @@ export class ExpressLoader {
         this.app.use(express.urlencoded({extended: false}));
 
         APIs.loadRestEndPoints(this.app);
+    }
+
+    setExpressSession(){
+        //use sessions for tracking logins
+        this.app.use(session({
+            secret: config.sessionSecret,
+            resave: true,
+            saveUninitialized: false
+        }));
     }
 
     /**
