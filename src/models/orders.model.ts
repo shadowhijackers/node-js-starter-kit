@@ -24,24 +24,24 @@ export class OrdersModelSchema {
 
     getOrdersExtension() {
 
-        this.schema.statics.getOrders = function (options: { userId: string, createdAt: Date }) {
+        this.schema.statics.getOrders = function (options: { userId: string, ordersDate: Date }, role: string) {
+
             return new Promise((resolve, reject) => {
-                const startDate = new Date(options.createdAt).setHours(0, 0, 1);
-                const endDate = new Date(options.createdAt).setHours(24, 0);
-                console.log('payload', {
-                    userId: options.userId,
+
+                const startDate = new Date(options.ordersDate).setHours(0, 0, 1);
+                const endDate = new Date(options.ordersDate).setHours(24, 0);
+                const query: any = {
                     created_at: {
                         $gte: new Date(startDate).toISOString(),
                         $lt: new Date(endDate).toISOString()
                     }
-                });
-                this.find({
-                    userId: options.userId,
-                    created_at: {
-                        $gte: new Date(startDate).toISOString(),
-                        $lt: new Date(endDate).toISOString()
-                    }
-                }).exec((err: NativeError, orders: any) => {
+                };
+
+                if(role == 'admin'){
+                   query.userId = options.userId;
+                }
+
+                this.find(query).exec((err: NativeError, orders: any) => {
                     if (!err) {
                         resolve(orders);
                     } else {

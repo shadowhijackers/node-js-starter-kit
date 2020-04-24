@@ -11,12 +11,13 @@ export class OrdersService {
     ) {
     }
 
-    public async getOrders(options: any) {
-        const result = await this.ordersModel.getOrders(options);
+    public async getOrders(options: any, role: string) {
+        const result = await this.ordersModel.getOrders(options, role);
         return result;
     }
 
     public async postOrders(orderDetails: any) {
+        const order = this.ordersModel(orderDetails);
         const result = await this.ordersModel.saveOrder(orderDetails);
         return result;
     }

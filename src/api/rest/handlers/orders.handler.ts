@@ -8,31 +8,33 @@ import * as common from "../../../common";
 export class OrdersHandler {
 
     constructor(
-        private ordersService: OrdersService
+        private ordersService: OrdersService,
     ) {
     }
 
     getOrdersAPIHandler() {
         return async (req: Request, res: Response) => {
-           if(req.query.orders_date) {
+            if (req.query.orders_date) {
 
-             const options = {userId: req.session?.userId, createdAt: req.query.orders_date};
-             const result = await this.ordersService.getOrders(options);
+                const userId = req.body.authData.userId;
+                const options = {userId: userId, ordersDate: req.query.orders_date};
+                const role = req.body.authData.role;
+                const result = await this.ordersService.getOrders(options, role);
 
-             if(result.error){
-                 res.status(400).send(result);
-                 return
-             }
-               const response = common.formatSuccessMessage({
-                   msg: 'Success',
-                   data: result,
-                   sessionToken: req?.headers.authorization
-               });
-             res.status(200).send(response);
-             return
-           }
+                if (result.error) {
+                    res.status(400).send(result);
+                    return
+                }
+                const response = common.formatSuccessMessage({
+                    msg: 'Success',
+                    data: result,
+                    sessionToken: req?.headers.authorization
+                });
+                res.status(200).send(response);
+                return
+            }
 
-           res.status(400).send({error: 'Send neccessary params'})
+            res.status(400).send({error: 'Send neccessary params'})
         }
     }
 
@@ -40,9 +42,11 @@ export class OrdersHandler {
 
         return async (req: Request, res: Response) => {
 
+            req.body.userId = req.body.authData.userId;
+            delete req.body.authData;
             const result = await this.ordersService.postOrders(req.body);
 
-            if(result.error){
+            if (result.error) {
                 res.status(400).send(result);
                 return
             }

@@ -62,16 +62,16 @@ export class UsersModelSchema {
                         if (!result || result.length === 0) {
                             this.create(user, ((err: Error, doc: any) => {
                                 if (!err) {
-                                    resolve({message: 'User created successfully', isSuccess: true})
+                                    resolve(doc);
                                    return
                                 }
 
-                                resolve(doc);
+                                resolve({error: 'Something went wrong', isSuccess: false});
                                 return;
                             }));
                         } else {
                             console.log('Error',result);
-                            resolve({message: 'Email is already exsits', isSuccess: false})
+                            resolve({error: 'Email is already exsits', isSuccess: false})
                         }
                     }).catch((err: Error) => reject(err))
                 ;

@@ -4,7 +4,7 @@ import {NextFunction, Request, Response} from "express";
 import {UsersService} from "../../../services";
 import * as common from "../../../common";
 import session from "express-session";
-import {JwtProvider} from "../../../config/jwt.provider";
+import {JwtProvider} from "../../../core/jwt.provider";
 
 @Service()
 export class UsersHandler {
@@ -36,18 +36,19 @@ export class UsersHandler {
                 if (payload) {
 
                     const result: any = await this.usersService.registerUser(payload);
-                    const token: string = JwtProvider.generateToken(result._id, result.role);
+
+                    if (!result.error) {
+                        res.status(202).send(result);
+                        return
+                    }
+
+                    const token: string = JwtProvider.generateToken(result._doc._id.toString(), result._doc.role.toString());
                     const response = common.formatSuccessMessage({
                         msg: 'Success',
-                        data: {},
+                        data: JSON.parse(JSON.stringify(result._doc)),
                         sessionToken: token
                     });
 
-
-                    if (!result.error) {
-                        res.status(202).send(response);
-                        return
-                    }
 
                     response.status.code = 400;
                     response.status.message = result?.message;
