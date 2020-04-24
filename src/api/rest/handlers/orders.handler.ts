@@ -14,9 +14,9 @@ export class OrdersHandler {
 
     getOrdersAPIHandler() {
         return async (req: Request, res: Response) => {
-           if(req.query.user_id && req.query.orders_date) {
+           if(req.query.orders_date) {
 
-             const options = {userId: req.query.user_id, createdAt: req.query.orders_date};
+             const options = {userId: req.session?.userId, createdAt: req.query.orders_date};
              const result = await this.ordersService.getOrders(options);
 
              if(result.error){
@@ -26,7 +26,7 @@ export class OrdersHandler {
                const response = common.formatSuccessMessage({
                    msg: 'Success',
                    data: result,
-                   sessionToken: req?.session?.user_id
+                   sessionToken: req?.headers.authorization
                });
              res.status(200).send(response);
              return
@@ -50,7 +50,7 @@ export class OrdersHandler {
             const response = common.formatSuccessMessage({
                 msg: 'Success',
                 data: result,
-                sessionToken: req?.session?.user_id
+                sessionToken: req?.headers?.authorization
             });
             res.status(200).send(response);
         }

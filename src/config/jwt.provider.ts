@@ -5,14 +5,14 @@ import config from '../config';
 
 export class JwtProvider {
 
-    public static generateToken(user: any) {
-       return jwt.sign({id: user._id}, config.jwtSecret as string, {
+    public static generateToken(userId: string, role: string) {
+       return jwt.sign({id: userId, role}, config.jwtSecret as string, {
             expiresIn: 86400 // expires in 24 hours
         });
     }
 
-    public static verifyToken(token: string, callback: Function) {
-        jwt.verify(token, config.jwtSecret as string, callback as any)
+    public static verifyToken(token: string) {
+       return  jwt.verify(token, config.jwtSecret as string)
     }
 
 }

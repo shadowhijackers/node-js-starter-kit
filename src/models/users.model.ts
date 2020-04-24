@@ -60,10 +60,14 @@ export class UsersModelSchema {
                 this.find({email: user.email})
                     .then((result: any) => {
                         if (!result || result.length === 0) {
-                            this.create(user, ((err: Error) => {
+                            this.create(user, ((err: Error, doc: any) => {
                                 if (!err) {
                                     resolve({message: 'User created successfully', isSuccess: true})
+                                   return
                                 }
+
+                                resolve(doc);
+                                return;
                             }));
                         } else {
                             console.log('Error',result);
@@ -85,7 +89,6 @@ export class UsersModelSchema {
                             bcrypt.compare(user.password, auth.password, (err, callback) => {
                                 if (!err) {
                                     const output = JSON.parse(JSON.stringify(user));
-                                    delete output._id;
                                     delete output.password;
                                     resolve(output)
                                 } else {

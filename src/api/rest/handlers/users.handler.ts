@@ -3,6 +3,8 @@ import {NextFunction, Request, Response} from "express";
 
 import {UsersService} from "../../../services";
 import * as common from "../../../common";
+import session from "express-session";
+import {JwtProvider} from "../../../config/jwt.provider";
 
 @Service()
 export class UsersHandler {
@@ -14,6 +16,7 @@ export class UsersHandler {
 
     getUsersAPIHandler() {
         return async (req: Request, res: Response) => {
+            debugger
             const users = await this.usersService.getUsers();
             const response = common.formatSuccessMessage({
                 msg: 'Success',
@@ -33,14 +36,15 @@ export class UsersHandler {
                 if (payload) {
 
                     const result: any = await this.usersService.registerUser(payload);
+                    const token: string = JwtProvider.generateToken(result._id, result.role);
                     const response = common.formatSuccessMessage({
                         msg: 'Success',
                         data: {},
-                        sessionToken: 'Auth Token'
+                        sessionToken: token
                     });
-                    console.log("response", response);
-                    console.log('success', result);
-                    if (result?.isSuccess) {
+
+
+                    if (!result.error) {
                         res.status(202).send(response);
                         return
                     }
@@ -52,7 +56,7 @@ export class UsersHandler {
 
                 }
             } catch (e) {
-                console.log('Exception', e)
+                console.log('Exception', e);
                 const errorResponse = common.formatErrorMessage({msg: 'Something happend in the server', code: 500});
                 res.status(400).send(errorResponse);
             }
@@ -67,8 +71,18 @@ export class UsersHandler {
                 res.status(400).send({error: result.error});
                 return
             }
-            if(!!req.session)req.session.userId = result._id;
-            res.status(201).send(result);
+
+            const token = JwtProvider.generateToken(result._id, result.role);
+            const response = common.formatSuccessMessage({
+                msg: 'Success',
+                data: result,
+                sessionToken: token
+            });
+
+            const sess: any = req.session;
+            sess.userId = result._id;
+
+            res.status(201).send(response);
         }
     }
 
